@@ -26,11 +26,19 @@ fully bilingual interface (EN / FR).
 
 1. Go to the [**Releases**](../../releases) page and download the latest
    `Vanadiel Title Tracker Setup x.y.z.exe`.
-2. Run it. On first launch Windows SmartScreen may warn (unsigned app) →
-   **More info → Run anyway**.
+2. Run it (see the SmartScreen note below on first launch).
 3. Launch **Title Tracker** from the Start menu.
 
 > Windows 10/11 (64-bit). Nothing else required — Chromium and Node are bundled.
+
+### "Windows protected your PC" on first launch
+
+The app is **not code-signed** (signing requires a paid certificate), so Windows
+SmartScreen flags this unrecognized app. **It is not malicious — just unsigned.**
+To run it:
+
+- Click **More info → Run anyway**, **or**
+- Right-click the `.exe` → **Properties** → tick **Unblock** → **OK**, then launch it.
 
 ## Get your titles into the app
 

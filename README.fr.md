@@ -27,11 +27,19 @@ entièrement bilingue (FR / EN).
 
 1. Va sur la page [**Releases**](../../releases) et télécharge le dernier
    `Vanadiel Title Tracker Setup x.y.z.exe`.
-2. Lance-le. Au 1ᵉʳ démarrage, Windows SmartScreen peut avertir (app non
-   signée) → **Informations complémentaires → Exécuter quand même**.
+2. Lance-le (voir la note SmartScreen ci-dessous au 1ᵉʳ démarrage).
 3. Ouvre **Title Tracker** depuis le menu Démarrer.
 
 > Windows 10/11 (64-bit). Rien d'autre n'est requis — Chromium et Node sont embarqués.
+
+### « Windows a protégé votre ordinateur » au 1ᵉʳ lancement
+
+L'application **n'est pas signée numériquement** (la signature nécessite un
+certificat payant), donc Windows SmartScreen avertit pour cette app non reconnue.
+**Elle n'est pas malveillante — juste non signée.** Pour la lancer :
+
+- Clique sur **Informations complémentaires → Exécuter quand même**, **ou**
+- Clic droit sur le `.exe` → **Propriétés** → coche **Débloquer** → **OK**, puis lance-le.
 
 ## Récupérer tes titres dans l'app
 
