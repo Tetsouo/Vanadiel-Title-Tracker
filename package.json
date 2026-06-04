@@ -17,13 +17,22 @@
     "appId": "com.tetsouo.titletracker",
     "productName": "Vanadiel Title Tracker",
     "directories": { "output": "dist_electron" },
-    "files": ["electron/**", "dist/**", "addon/titles/**", "package.json"],
+    "files": [
+      "electron/**",
+      "dist/titles_filtered.html",
+      "dist/style.css",
+      "dist/app.js",
+      "dist/data.js",
+      "addon/titles/**",
+      "package.json"
+    ],
     "win": { "target": ["nsis"] },
     "nsis": {
       "oneClick": false,
       "allowToChangeInstallationDirectory": true,
       "perMachine": false,
-      "shortcutName": "Title Tracker"
+      "shortcutName": "Title Tracker",
+      "deleteAppDataOnUninstall": true
     }
   }
 }
