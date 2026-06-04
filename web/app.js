@@ -28,6 +28,7 @@
       "empty.done.title": "Aucun titre accompli", "empty.done.msg": "Validez un titre avec le bouton ✓ pour le retrouver ici.",
       "toast.undo": "↩ Annuler", "toast.unlocked": "accompli",
       "modal.title": "Configuration", "modal.close": "Fermer",
+      "onboard.welcome": "Bienvenue ! Première étape : installe l'addon Windower (ci-dessous), puis importe tes titres (onglet 2). Tu pourras rouvrir ceci à tout moment via « Importer / Addon ».",
       "mtab.install": "1 · Installer l'addon", "mtab.import": "2 · Importer mes titres",
       "import.intro": "Importe les fichiers produits par l'addon Windower (<code>&lt;Perso&gt;-owned.txt</code> et <code>&lt;Perso&gt;-missing.txt</code>). Le fichier <b>owned</b> suffit : tout le reste est « à faire ». Tes données restent locales.",
       "import.ownedLabel": "Fichier <b>owned</b> (titres obtenus)", "import.missingLabel": "Fichier <b>missing</b> (optionnel)",
@@ -67,6 +68,7 @@
       "empty.done.title": "No titles completed", "empty.done.msg": "Mark a title with ✓ to see it here.",
       "toast.undo": "↩ Undo", "toast.unlocked": "unlocked",
       "modal.title": "Setup", "modal.close": "Close",
+      "onboard.welcome": "Welcome! First step: install the Windower add-on (below), then import your titles (tab 2). You can reopen this anytime via “Import / Add-on”.",
       "mtab.install": "1 · Install the add-on", "mtab.import": "2 · Import my titles",
       "import.intro": "Import the files produced by the Windower add-on (<code>&lt;Char&gt;-owned.txt</code> and <code>&lt;Char&gt;-missing.txt</code>). The <b>owned</b> file is enough: everything else becomes “to do”. Your data stays local.",
       "import.ownedLabel": "<b>owned</b> file (unlocked titles)", "import.missingLabel": "<b>missing</b> file (optional)",
@@ -139,6 +141,12 @@
   function persistOwned() { state.owned = [...ownedSet]; save(); }
 
   // ── Langue ──
+  function detectLang() {
+    try {
+      const list = (navigator.languages && navigator.languages.length) ? navigator.languages : [navigator.language || "en"];
+      return list.some((l) => String(l).toLowerCase().startsWith("fr")) ? "fr" : "en";
+    } catch (e) { return "en"; }
+  }
   function applyLang() {
     document.documentElement.lang = lang;
     document.querySelectorAll("[data-i18n]").forEach((e) => { e.textContent = t(e.dataset.i18n); });
@@ -426,7 +434,7 @@
 
   // ── Modale ──
   function openModal() { $("setupModal").hidden = false; }
-  function closeModal() { $("setupModal").hidden = true; }
+  function closeModal() { $("setupModal").hidden = true; const b = $("onboardBanner"); if (b) b.hidden = true; }
   function switchModalTab(name) {
     document.querySelectorAll(".mtab").forEach((b) => b.classList.toggle("active", b.dataset.mtab === name));
     document.querySelectorAll(".msec").forEach((s) => s.classList.toggle("active", s.id === "msec-" + name));
@@ -502,7 +510,7 @@
   // ── Init ──
   function init() {
     load();
-    lang = state.lang || ((navigator.language || "en").toLowerCase().indexOf("fr") === 0 ? "fr" : "en");
+    lang = state.lang || detectLang();
     state.lang = lang;
     initOwnership();
     applyTheme();
@@ -518,6 +526,14 @@
     updateCounts();
     updateStickyOffset();
     requestAnimationFrame(() => window.scrollTo(0, state.scrollY || 0));
+
+    // Premier lancement : onboarding (installer l'addon → importer)
+    if (!state.onboarded) {
+      state.onboarded = true; save();
+      switchModalTab("install");
+      const b = $("onboardBanner"); if (b) b.hidden = false;
+      openModal();
+    }
   }
 
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);

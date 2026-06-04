@@ -300,6 +300,8 @@ a:hover{border-bottom-color:color-mix(in srgb,var(--info) 50%,transparent)}
 .mtab:hover{color:var(--fg-2)}
 .mtab.active{color:var(--accent-2);border-bottom-color:var(--accent)}
 .modal-body{padding:18px 22px 22px}
+.onboard-banner{background:color-mix(in srgb,var(--accent) 12%,transparent);border:1px solid color-mix(in srgb,var(--accent) 32%,transparent);
+  color:var(--fg);border-radius:10px;padding:11px 14px;font-size:13px;line-height:1.55;margin-bottom:16px}
 .msec{display:none}
 .msec.active{display:block;animation:fade .2s var(--ease) both}
 .msec-intro{font-size:13px;color:var(--fg-2);line-height:1.6;margin-bottom:16px}
