@@ -32,7 +32,8 @@
       "allowToChangeInstallationDirectory": true,
       "perMachine": false,
       "shortcutName": "Title Tracker",
-      "deleteAppDataOnUninstall": true
+      "deleteAppDataOnUninstall": true,
+      "include": "build/installer.nsh"
     }
   }
 }
