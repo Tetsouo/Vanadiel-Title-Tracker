@@ -1,0 +1,34 @@
+# ── Python ──
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+
+# ── Node / Electron ──
+/node_modules/
+/dist_electron/
+
+# ── Bundle web généré (artefact de build) ──
+/dist/
+
+# ── Exports personnels du jeu ──
+/data/*.txt
+/data/*.titles
+
+# ── Outils / éditeur / divers locaux ──
+memory/
+.vscode/
+.idea/
+
+# ── Fichiers de travail / captures / notes locales ──
+*.png
+Title.txt
+_*.html
+_*.js
+_*.bat
+_install_test/
+
+# ── OS ──
+.DS_Store
+Thumbs.db

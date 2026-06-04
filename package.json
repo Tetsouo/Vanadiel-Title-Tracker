@@ -1,0 +1,29 @@
+{
+  "name": "vanadiel-title-tracker",
+  "version": "2.0.0",
+  "description": "Final Fantasy XI title tracker — bilingual web & desktop app, with in-game export import and Windower add-on installer.",
+  "author": "Tetsouo",
+  "license": "MIT",
+  "main": "electron/main.js",
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder --win nsis"
+  },
+  "devDependencies": {
+    "electron": "^31.7.7",
+    "electron-builder": "^24.13.3"
+  },
+  "build": {
+    "appId": "com.tetsouo.titletracker",
+    "productName": "Vanadiel Title Tracker",
+    "directories": { "output": "dist_electron" },
+    "files": ["electron/**", "dist/**", "addon/titles/**", "package.json"],
+    "win": { "target": ["nsis"] },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "perMachine": false,
+      "shortcutName": "Title Tracker"
+    }
+  }
+}

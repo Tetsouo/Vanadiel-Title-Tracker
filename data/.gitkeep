@@ -1,0 +1,4 @@
+# Placez ici vos exports du jeu :
+#   <NomDuPersonnage>-missing.txt
+#   <NomDuPersonnage>-owned.txt
+# (ou simplement missing.txt / owned.txt)
