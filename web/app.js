@@ -21,13 +21,14 @@
       "setup.title": "Importer mes titres / installer l'addon", "setup.btn": "Importer / Addon",
       "filter.cat": "Catégorie", "filter.npc": "PNJ", "filter.all": "Toutes", "npc.all": "Tous les PNJ",
       "reset": "↺ Réinitialiser",
+      "reset.progress": "Réinitialiser ma progression", "reset.confirm": "Effacer toute ta progression locale ? (tes fichiers d'export ne sont pas touchés)", "reset.done": "✓ Progression réinitialisée.",
       "kpi.completed": "Complété", "kpi.owned": "Obtenus", "kpi.todo": "À faire", "kpi.total": "Total",
       "th.title": "Titre", "th.how": "Obtention", "th.npc": "PNJ", "th.cat": "Catégorie",
       "empty.todo.title": "Aucun titre à afficher", "empty.todo.msg": "Ajustez vos filtres ou votre recherche.",
       "empty.done.title": "Aucun titre accompli", "empty.done.msg": "Validez un titre avec le bouton ✓ pour le retrouver ici.",
       "toast.undo": "↩ Annuler", "toast.unlocked": "accompli",
       "modal.title": "Configuration", "modal.close": "Fermer",
-      "mtab.import": "1 · Importer mes titres", "mtab.install": "2 · Installer l'addon",
+      "mtab.install": "1 · Installer l'addon", "mtab.import": "2 · Importer mes titres",
       "import.intro": "Importe les fichiers produits par l'addon Windower (<code>&lt;Perso&gt;-owned.txt</code> et <code>&lt;Perso&gt;-missing.txt</code>). Le fichier <b>owned</b> suffit : tout le reste est « à faire ». Tes données restent locales.",
       "import.ownedLabel": "Fichier <b>owned</b> (titres obtenus)", "import.missingLabel": "Fichier <b>missing</b> (optionnel)",
       "import.btn": "Importer",
@@ -44,7 +45,7 @@
       "install.cmd1": "<code>//lua load titles</code>",
       "install.cmd2": "Visite les PNJ de titres et/ou change de zone pour enregistrer.",
       "install.cmd3": "<code>//titles owned export</code> puis <code>//titles missing export</code>",
-      "install.cmd4": "Les fichiers apparaissent dans <code>…\\addons\\titles\\export\\</code> → reviens ici (onglet 1) pour les importer.",
+      "install.cmd4": "Les fichiers apparaissent dans <code>…\\addons\\titles\\export\\</code> → reviens ici (onglet 2) pour les importer.",
       "install.installing": "Installation en cours…",
       "install.okPre": "✓ Addon installé (", "install.okFiles": " fichiers) dans ", "install.okCmd": ". En jeu : ",
       "install.failPick": "Sélection impossible ici — installe manuellement via les liens ci-dessous.",
@@ -58,13 +59,14 @@
       "setup.title": "Import my titles / install the add-on", "setup.btn": "Import / Add-on",
       "filter.cat": "Category", "filter.npc": "NPC", "filter.all": "All", "npc.all": "All NPCs",
       "reset": "↺ Reset",
+      "reset.progress": "Reset my progress", "reset.confirm": "Erase all your local progress? (your export files are untouched)", "reset.done": "✓ Progress reset.",
       "kpi.completed": "Completed", "kpi.owned": "Owned", "kpi.todo": "To do", "kpi.total": "Total",
       "th.title": "Title", "th.how": "How to obtain", "th.npc": "NPC", "th.cat": "Category",
       "empty.todo.title": "No titles to show", "empty.todo.msg": "Adjust your filters or your search.",
       "empty.done.title": "No titles completed", "empty.done.msg": "Mark a title with ✓ to see it here.",
       "toast.undo": "↩ Undo", "toast.unlocked": "unlocked",
       "modal.title": "Setup", "modal.close": "Close",
-      "mtab.import": "1 · Import my titles", "mtab.install": "2 · Install the add-on",
+      "mtab.install": "1 · Install the add-on", "mtab.import": "2 · Import my titles",
       "import.intro": "Import the files produced by the Windower add-on (<code>&lt;Char&gt;-owned.txt</code> and <code>&lt;Char&gt;-missing.txt</code>). The <b>owned</b> file is enough: everything else becomes “to do”. Your data stays local.",
       "import.ownedLabel": "<b>owned</b> file (unlocked titles)", "import.missingLabel": "<b>missing</b> file (optional)",
       "import.btn": "Import",
@@ -81,7 +83,7 @@
       "install.cmd1": "<code>//lua load titles</code>",
       "install.cmd2": "Visit title NPCs and/or change zones to record them.",
       "install.cmd3": "<code>//titles owned export</code> then <code>//titles missing export</code>",
-      "install.cmd4": "Files appear in <code>…\\addons\\titles\\export\\</code> → come back here (tab 1) to import them.",
+      "install.cmd4": "Files appear in <code>…\\addons\\titles\\export\\</code> → come back here (tab 2) to import them.",
       "install.installing": "Installing…",
       "install.okPre": "✓ Add-on installed (", "install.okFiles": " files) into ", "install.okCmd": ". In-game: ",
       "install.failPick": "Can't pick here — install manually via the links below.",
@@ -115,12 +117,22 @@
   const load = () => { try { const s = localStorage.getItem(LS); if (s) state = { ...state, ...JSON.parse(s) }; } catch (e) {} };
 
   function initOwnership() {
-    if (Array.isArray(state.owned)) ownedSet = new Set(state.owned);
-    else {
-      ownedSet = new Set(defaultOwned);
-      if (Array.isArray(state.validated)) state.validated.forEach((tt) => ownedSet.add(tt));
-      state.owned = [...ownedSet];
+    if (Array.isArray(state.owned)) { ownedSet = new Set(state.owned); return; }
+    ownedSet = new Set(defaultOwned);
+    if (Array.isArray(state.validated) && state.validated.length) {
+      state.validated.forEach((tt) => ownedSet.add(tt));
+      state.owned = [...ownedSet]; // migration depuis l'ancien format, persistée une fois
     }
+    // sinon : on NE fige PAS le défaut dans le localStorage (laisse state.owned = null)
+  }
+  function resetProgress() {
+    if (!window.confirm(t("reset.confirm"))) return;
+    ownedSet = new Set(defaultOwned);
+    state.owned = null;
+    save();
+    refreshAll();
+    const res = $("importResult");
+    if (res) { res.className = "import-result ok"; res.textContent = t("reset.done"); }
   }
   function persistOwned() { state.owned = [...ownedSet]; save(); }
 
@@ -450,6 +462,7 @@
     $("toastUndo").addEventListener("click", () => { if (toastRow) undoTitle(toastRow); hideToast(); });
     $("themeToggle").addEventListener("click", toggleTheme);
     $("langToggle").addEventListener("click", toggleLang);
+    $("resetProgress").addEventListener("click", resetProgress);
 
     $("setupBtn").addEventListener("click", openModal);
     $("setupClose").addEventListener("click", closeModal);

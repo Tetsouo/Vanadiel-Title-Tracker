@@ -146,12 +146,12 @@
       <button class="modal-close" id="setupClose" type="button" data-i18n-title="modal.close">✕</button>
     </div>
     <div class="modal-tabs">
-      <button class="mtab active" type="button" data-mtab="import" data-i18n="mtab.import">1 · Importer mes titres</button>
-      <button class="mtab" type="button" data-mtab="install" data-i18n="mtab.install">2 · Installer l'addon</button>
+      <button class="mtab active" type="button" data-mtab="install" data-i18n="mtab.install">1 · Installer l'addon</button>
+      <button class="mtab" type="button" data-mtab="import" data-i18n="mtab.import">2 · Importer mes titres</button>
     </div>
     <div class="modal-body">
 
-      <section class="msec active" id="msec-import">
+      <section class="msec" id="msec-import">
         <p class="msec-intro" data-i18n-html="import.intro"></p>
         <div class="field">
           <label for="importOwned" data-i18n-html="import.ownedLabel"></label>
@@ -163,9 +163,10 @@
         </div>
         <button class="btn-primary" id="doImport" type="button" data-i18n="import.btn">Importer</button>
         <div class="import-result" id="importResult"></div>
+        <button class="btn-ghost" id="resetProgress" type="button" style="margin-top:16px" data-i18n="reset.progress">Réinitialiser ma progression</button>
       </section>
 
-      <section class="msec" id="msec-install">
+      <section class="msec active" id="msec-install">
         <p class="msec-intro" data-i18n-html="install.intro"></p>
 
         <div id="pickWrap" hidden>
