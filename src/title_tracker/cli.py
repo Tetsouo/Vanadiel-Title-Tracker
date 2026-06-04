@@ -26,16 +26,29 @@ def _load(name: str, raw_fallback: str) -> tuple[list[str], str | None]:
 
 
 def run() -> None:
-    missing_raw, char_m = _load(config.MISSING_FILE, config.RAW_MISSING)
-    owned_raw, char_o = _load(config.OWNED_FILE, config.RAW_OWNED)
-    character = char_m or char_o
+    # `--blank` : build PUBLIC sans aucune donnée joueur (tout en « à faire »,
+    # 0 possédé). Idéal pour distribuer : chaque joueur importe ses titres.
+    blank = "--blank" in sys.argv
+
+    if blank:
+        print("[INFO] Build PUBLIC (vierge) — aucune donnée joueur intégrée")
+        character = None
+    else:
+        missing_raw, char_m = _load(config.MISSING_FILE, config.RAW_MISSING)
+        owned_raw, char_o = _load(config.OWNED_FILE, config.RAW_OWNED)
+        character = char_m or char_o
 
     print("[INFO] Récupération de la table des titres sur BG-Wiki…")
     df = scraper.fetch_titles_table()
     total_game = len(df)
     print(f"[INFO] {total_game} titres trouvés sur BG-Wiki")
 
-    df_missing, df_owned, unmatched = titles.split_owned_missing(df, missing_raw, owned_raw)
+    if blank:
+        df_missing = titles.enrich(df)            # tous les titres = à faire
+        df_owned = titles.enrich(df.iloc[:0])     # aucun possédé
+        unmatched = []
+    else:
+        df_missing, df_owned, unmatched = titles.split_owned_missing(df, missing_raw, owned_raw)
 
     if unmatched:
         print(f"\n[WARN] {len(unmatched)} titre(s) de l'export introuvable(s) sur BG-Wiki (orthographe ?) :")
