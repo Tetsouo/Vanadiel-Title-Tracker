@@ -7,7 +7,7 @@ env/
 
 # ── Node / Electron ──
 /node_modules/
-/dist_electron/
+/dist_electron*/
 
 # ── Bundle web généré (artefact de build) ──
 /dist/
